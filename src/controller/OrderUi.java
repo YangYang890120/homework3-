@@ -1,17 +1,24 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import model.Employee;
 import model.Orders;
+import model.Product;
 import service.impl.OrderServiceImpl;
+import service.impl.ProductServiceImpl;
+import util.JTextFieldHintListener;
+import util.cal;
 
 import java.awt.GridLayout;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -19,9 +26,21 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.awt.event.ActionEvent;
+import com.toedter.calendar.JDayChooser;
+import com.toedter.calendar.JDateChooser;
+import javax.swing.JTextArea;
 
 public class OrderUi extends JFrame {
 
@@ -33,10 +52,13 @@ public class OrderUi extends JFrame {
 	private JTextField memberno;
 	private JTextField orderamount;
 	private JTable table;
-	private JTextField textField_4;
 	public JPanel panel;
 	public OrderServiceImpl osi=new OrderServiceImpl();
-	private JTextField date;
+	public JDateChooser date;
+	public JDateChooser date_1;
+	public JDateChooser date_2;
+	public ProductServiceImpl psi=new ProductServiceImpl();
+	public JTextArea output;
 
 	/**
 	 * Launch the application.
@@ -82,7 +104,9 @@ public class OrderUi extends JFrame {
 		panel.add(lblNewLabel_1);
 		
 		orderno = new JTextField();
+		orderno.setText("O000");
 		orderno.setBounds(109, 59, 99, 21);
+		orderno.addFocusListener(new JTextFieldHintListener(orderno,"O000"));
 		panel.add(orderno);
 		orderno.setColumns(10);
 		
@@ -92,7 +116,9 @@ public class OrderUi extends JFrame {
 		panel.add(lblNewLabel_1_1);
 		
 		barcode = new JTextField();
+		barcode.setText("12345678");
 		barcode.setColumns(10);
+		barcode.addFocusListener(new JTextFieldHintListener(barcode,"12345678"));
 		barcode.setBounds(109, 114, 99, 21);
 		panel.add(barcode);
 		
@@ -102,6 +128,8 @@ public class OrderUi extends JFrame {
 		panel.add(lblNewLabel_1_2);
 		
 		employeeno = new JTextField();
+		employeeno.setText("E000");
+		employeeno.addFocusListener(new JTextFieldHintListener(employeeno,"E000"));
 		employeeno.setColumns(10);
 		employeeno.setBounds(109, 167, 99, 21);
 		panel.add(employeeno);
@@ -112,6 +140,8 @@ public class OrderUi extends JFrame {
 		panel.add(lblNewLabel_1_3);
 		
 		memberno = new JTextField();
+		memberno.setText("M000");
+		memberno.addFocusListener(new JTextFieldHintListener(memberno,"M000"));
 		memberno.setColumns(10);
 		memberno.setBounds(109, 219, 99, 21);
 		panel.add(memberno);
@@ -133,63 +163,272 @@ public class OrderUi extends JFrame {
 		
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(250, 22, 664, 200);
+		scrollPane.setBounds(250, 18, 664, 192);
 		panel.add(scrollPane);
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int selectedRow = table.getSelectedRow();
+				if (selectedRow != -1) {
+					TableModel model = table.getModel();
+					orderno.setText(model.getValueAt(selectedRow, 0).toString());
+					barcode.setText(model.getValueAt(selectedRow, 1).toString());
+					employeeno.setText(model.getValueAt(selectedRow, 2).toString());
+					memberno.setText(model.getValueAt(selectedRow, 3).toString());
+					orderamount.setText(model.getValueAt(selectedRow, 4).toString());
+					orderno.setForeground(Color.BLACK);
+					barcode.setForeground(Color.BLACK);
+					employeeno.setForeground(Color.BLACK);
+					memberno.setForeground(Color.BLACK);
+				}
+			}
+		});
 		loadDataToTable();
-		textField_4 = new JTextField();
-		textField_4.setText("列印出貨單");
-		textField_4.setBounds(250, 245, 664, 196);
-		panel.add(textField_4);
-		textField_4.setColumns(10);
 		
 		JButton btnNewButton = new JButton("新增");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addOr();
+//				updateToProduct();
+				loadDataToTable();
+			}
+		});
+		btnNewButton.setFont(new Font("新細明體", Font.PLAIN, 16));
 		btnNewButton.setBounds(20, 351, 87, 23);
 		panel.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("查詢");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadDataToTable();
+			}
+		});
+		btnNewButton_1.setFont(new Font("新細明體", Font.PLAIN, 16));
 		btnNewButton_1.setBounds(121, 351, 87, 23);
 		panel.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("修改");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				update();
+				loadDataToTable();
+			}
+		});
+		btnNewButton_2.setFont(new Font("新細明體", Font.PLAIN, 16));
 		btnNewButton_2.setBounds(20, 418, 87, 23);
 		panel.add(btnNewButton_2);
 		
 		JButton btnNewButton_3 = new JButton("刪除");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				delete();
+				loadDataToTable();
+			}
+		});
+		btnNewButton_3.setFont(new Font("新細明體", Font.PLAIN, 16));
 		btnNewButton_3.setBounds(121, 418, 87, 23);
 		panel.add(btnNewButton_3);
 		
-		date = new JTextField();
-		date.setBounds(112, 317, 96, 21);
+		JButton btnNewButton_4 = new JButton("列印");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try
+				{
+					output.print();
+				}
+				catch(PrinterException e1)
+				{
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnNewButton_4.setFont(new Font("新細明體", Font.PLAIN, 16));
+		btnNewButton_4.setBounds(827, 218, 87, 23);
+		panel.add(btnNewButton_4);
+		
+		JLabel lblNewLabel_3 = new JLabel("日期區間");
+		lblNewLabel_3.setFont(new Font("新細明體", Font.PLAIN, 16));
+		lblNewLabel_3.setBounds(250, 218, 73, 27);
+		panel.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_3_1 = new JLabel("日期區間");
+		lblNewLabel_3_1.setFont(new Font("新細明體", Font.PLAIN, 16));
+		lblNewLabel_3_1.setBounds(500, 218, 73, 27);
+		panel.add(lblNewLabel_3_1);
+		
+		date = new JDateChooser();
+		date.setBounds(109, 320, 99, 21);
 		panel.add(date);
-		date.setColumns(10);
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        date.setDateFormatString("yyyy-MM-dd");
+        
+        date_1 = new JDateChooser();
+        date_1.setDateFormatString("yyyy-MM-dd");
+        date_1.setBounds(333, 218, 99, 21);
+        panel.add(date_1);
+        
+        date_2 = new JDateChooser();
+        date_2.setDateFormatString("yyyy-MM-dd");
+        date_2.setBounds(583, 218, 99, 21);
+        panel.add(date_2);
+        
+        JButton btnNewButton_5 = new JButton("新增出貨單");
+        btnNewButton_5.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		selectByDate();
+        		
+        	}
+        });
+        btnNewButton_5.setFont(new Font("新細明體", Font.PLAIN, 16));
+        btnNewButton_5.setBounds(692, 218, 125, 23);
+        panel.add(btnNewButton_5);
+        
+        JScrollPane scrollPane_1 = new JScrollPane();
+        scrollPane_1.setBounds(249, 249, 665, 192);
+        panel.add(scrollPane_1);
+        
+        output = new JTextArea();
+        scrollPane_1.setViewportView(output);
 	}
-	public void add()
+	public void addOr()
 	{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String Orderno = orderno.getText();
 		String Barcode = barcode.getText();
 		String Employee = employeeno.getText();
 		String member = memberno.getText();
 		Integer orderAmount = Integer.parseInt(orderamount.getText());
-		String Date= date.getText();
+		Date Date= date.getDate();
+		String DateString = sdf.format(Date);
 		if (Orderno.isEmpty() ||Barcode.isEmpty() || Employee.isEmpty() || member.isEmpty() || orderAmount.equals(0)
-				|| Date.isEmpty()) {
+				|| DateString.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "資料不可空白，請填寫完整", "錯誤", JOptionPane.ERROR_MESSAGE);
 			return;
 		} else {
-			Orders o = new Orders(Orderno, Barcode, Employee, member, orderAmount, Date);
-			osi.addOrder(o);
-			//clear();
+			Orders o = new Orders(Orderno, Barcode, Employee, member, orderAmount, DateString);
+			if(psi.findBarcode(Barcode))
+			{
+				osi.addOrder(o);
+				updateToProduct();
+				JOptionPane.showMessageDialog(null, "出貨資料新增成功,已將出貨數量從存貨扣除");
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, "查無此商品條碼", "錯誤", JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		
 	}
-	public DefaultTableModel convertListToTableModel(List<Orders> OrdersList) {
-		String[] columnNames = { "ID", "訂單編號", "條碼", "員工編號", "會員編號", "出貨數量", "日期"};
+	public void selectByDate()
+	{
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date Date_1= date_1.getDate();
+		Date Date_2= date_2.getDate();
+		String DateString1= sdf.format(Date_1);
+		String DateString2= sdf.format(Date_2);
+		List<Orders> l=osi.selectByDate(DateString1, DateString2);
+		DefaultTableModel model = convertListToTableModel(l);
+		table.setModel(model);
+		table.setDefaultEditor(Object.class, null);
+		Object ob=cal.ReadObiect("Employee.txt");
+		Employee m=(Employee)ob;
+		Integer Sum=0;
+		LocalDateTime localtime=LocalDateTime.now();
+		DateTimeFormatter dtf=DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss");
+		String FDT=localtime.format(dtf);
+		String orders = m.getName()+" 出貨單                                                          列印日期:"+FDT+
+						"\n=====================================================================================\n";
+		for(Orders o:l)
+		{
+			orders+=(
+			"出貨編號:"+o.getOrderno()+" 員工姓名:"+o.getEmployeeno()+" 會員姓名:"+o.getMemberno()+" 數量:"+o.getOrderamount()+" 日期"+o.getDate()+"總額"+o.getSum()+"\n"+
+			"----------------------------------------------------------------------------------------------------------------------------------\n");
+			Sum=Sum+o.getSum();
+		}
+		orders+=" ------------------------------------------------------------------------------------------- 總金額:"+Sum;
+		output.setText(orders);
+	}
+	public void updateToProduct()
+	{
+		Integer Orderamount =Integer.parseInt(orderamount.getText());
+		String Barcode=barcode.getText();
+		Product p=psi.findByBarcode(Barcode);
+		//p.getAmount()+=Orderamount;
+		if((p.getAmount()-Orderamount)<0)
+		{
+			JOptionPane.showMessageDialog(this, "出貨數量不可大於存貨", "錯誤", JOptionPane.ERROR_MESSAGE);
+		}
+		else {
+			psi.updateByOrderamount(Barcode,(p.getAmount()-Orderamount));
+			clear();
+		}		
+	}
+	
+	public void update(){
+		if(orderno.getText()!="")
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String Orderno=orderno.getText();
+			String Barcode=barcode.getText();
+			String Employee=employeeno.getText();
+			String Memberno=memberno.getText();
+			Integer OrderAmount=Integer.parseInt(orderamount.getText());
+			Date Date= date.getDate();
+			String DateString = sdf.format(Date);
+			//String Date=date.getDateFormatString();
+			if (Orderno.isEmpty() ||Barcode.isEmpty() || Employee.isEmpty() || Memberno.isEmpty() || OrderAmount.equals(0)
+					|| DateString.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "資料不可空白，請填寫完整", "錯誤", JOptionPane.ERROR_MESSAGE);
+				return;
+			} else {
+				if(psi.findBarcode(Barcode))
+				{
+					JOptionPane.showMessageDialog(null, "出貨資料修改成功");
+					osi.update(Orderno,Barcode,Employee,Memberno,OrderAmount,DateString);
+					clear();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(this, "查無此商品條碼", "錯誤", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				
+			}
+		}
+	}
+	public void delete()
+	{
+		if (orderno.getText() != "") {
+			int reply = JOptionPane.showConfirmDialog(null, "確定刪除這筆資料?", "刪除確認", JOptionPane.OK_CANCEL_OPTION);
+			if (reply == JOptionPane.YES_OPTION) {
+				String Orderno= orderno.getText();
+				osi.delete(Orderno);;
+				JOptionPane.showMessageDialog(null, "出貨資料刪除成功");
+				clear();
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "請選擇要刪除的資料");
+		}
+	}
+	public DefaultTableModel convertListToTableModel_2(List<Orders> OrdersList) {
+		String[] columnNames = { /*"ID",*/ "出貨編號", "產品名稱", "員工姓名", "會員姓名", "數量", "日期"};
 		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 		for (Orders o : OrdersList) {
-			Object[] rowData = { o.getId(), o.getOrderno(), o.getBarcode(), o.getEmployeeno(), o.getMemberno(), o.getOrderamount(),o.getDate()};
+			Object[] rowData = { /*o.getId(),*/ o.getOrderno(), o.getBarcode(), o.getEmployeeno(), o.getMemberno(), o.getOrderamount(),o.getDate()};
+			model.addRow(rowData);
+		}
+		return model;
+
+	}
+	public DefaultTableModel convertListToTableModel(List<Orders> OrdersList) {
+		String[] columnNames = { /*"ID",*/ "出貨編號", "條碼", "員工編號", "會員編號", "數量", "日期"};
+		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+		for (Orders o : OrdersList) {
+			Object[] rowData = { /*o.getId(),*/ o.getOrderno(), o.getBarcode(), o.getEmployeeno(), o.getMemberno(), o.getOrderamount(),o.getDate()};
 			model.addRow(rowData);
 		}
 		return model;
@@ -200,5 +439,21 @@ public class OrderUi extends JFrame {
 		DefaultTableModel model = convertListToTableModel(OrdersList);
 		table.setModel(model);
 		table.setDefaultEditor(Object.class, null);
+	}
+	public void clear()
+	{
+		orderno.setText("");
+		barcode.setText("");
+		employeeno.setText("");
+		memberno.setText("");
+		orderamount.setText("");
+		date.setDateFormatString("");
+	}
+	public static void updateTime(JLabel time)
+	{
+		LocalDateTime localtime=LocalDateTime.now();
+		DateTimeFormatter dtf=DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss a");
+		String FDT=localtime.format(dtf);
+		time.setText(FDT);					
 	}
 }

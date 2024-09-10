@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,6 +12,7 @@ import javax.swing.table.TableModel;
 import model.Employee;
 import model.Member;
 import service.impl.MemberServiceImpl;
+import util.JTextFieldHintListener;
 
 import java.awt.GridLayout;
 import java.util.List;
@@ -46,6 +48,7 @@ public class MemberUi extends JFrame {
 	public MemberServiceImpl msi=new MemberServiceImpl();
 	private JComboBox membership;
 	private JScrollPane scrollPane;
+	private JTextField keyword;
 
 	/**
 	 * Launch the application.
@@ -81,12 +84,12 @@ public class MemberUi extends JFrame {
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("會員管理");
-		lblNewLabel.setFont(new Font("新細明體", Font.PLAIN, 16));
+		lblNewLabel.setFont(new Font("新細明體", Font.PLAIN, 18));
 		lblNewLabel.setBounds(10, 10, 73, 27);
 		panel.add(lblNewLabel);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 186, 904, 265);
+		scrollPane.setBounds(10, 194, 904, 247);
 		panel.add(scrollPane);
 		
 		table = new JTable();
@@ -105,6 +108,7 @@ public class MemberUi extends JFrame {
 					phone.setText(model.getValueAt(selectedRow, 5).toString());
 					address.setText(model.getValueAt(selectedRow, 6).toString());
 					membership.setSelectedItem(model.getValueAt(selectedRow, 7).toString());
+					memberno.setForeground(Color.BLACK);
 				}
 			}
 		});
@@ -126,7 +130,9 @@ public class MemberUi extends JFrame {
 		panel.add(lblNewLabel_1);
 		
 		memberno = new JTextField();
+		memberno.setText("M000");
 		memberno.setColumns(10);
+		memberno.addFocusListener(new JTextFieldHintListener(memberno,"M000"));
 		memberno.setBounds(335, 47, 96, 21);
 		panel.add(memberno);
 		
@@ -208,7 +214,7 @@ public class MemberUi extends JFrame {
 			}
 		});
 		btnNewButton_2.setFont(new Font("新細明體", Font.PLAIN, 16));
-		btnNewButton_2.setBounds(272, 157, 87, 23);
+		btnNewButton_2.setBounds(248, 157, 87, 23);
 		panel.add(btnNewButton_2);
 		
 		JButton btnNewButton_1 = new JButton("修改");
@@ -219,7 +225,7 @@ public class MemberUi extends JFrame {
 			}
 		});
 		btnNewButton_1.setFont(new Font("新細明體", Font.PLAIN, 16));
-		btnNewButton_1.setBounds(481, 157, 87, 23);
+		btnNewButton_1.setBounds(481, 156, 87, 23);
 		panel.add(btnNewButton_1);
 		
 		JButton btnNewButton_3 = new JButton("刪除");
@@ -230,8 +236,15 @@ public class MemberUi extends JFrame {
 			}
 		});
 		btnNewButton_3.setFont(new Font("新細明體", Font.PLAIN, 16));
-		btnNewButton_3.setBounds(694, 157, 87, 23);
+		btnNewButton_3.setBounds(669, 157, 87, 23);
 		panel.add(btnNewButton_3);
+		
+		keyword = new JTextField(15);
+		keyword.setText("關鍵字");
+		keyword.addFocusListener(new JTextFieldHintListener(keyword,"關鍵字"));
+		keyword.setColumns(10);	
+		keyword.setBounds(335, 158, 96, 21);
+		panel.add(keyword);
 	}
 	public void addMe()//新增會員
 	{

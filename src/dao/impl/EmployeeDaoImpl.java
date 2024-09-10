@@ -19,6 +19,12 @@ public class EmployeeDaoImpl  implements EmployeeDao{
 		//新增
 		//new EmployeeDaoImpl().add(new Employee("m002","吳宗憲","jack","456","台北","001","manager"));
 		//查詢
+		List<Employee> l=new EmployeeDaoImpl().selectByKeyWord("李");
+		for(Employee m:l)
+		{
+			System.out.println(m.getId()+"\t"+m.getEmployeeno()+"\t"+m.getName()+"\t"+m.getAccount()+"\t"+m.getPassword()+
+					m.getAddress()+"\t"+m.getPhone());
+		}
 		/*List<Employee> l=new EmployeeDaoImpl().selectAll();
 		for(Employee m:l)
 		{
@@ -26,7 +32,7 @@ public class EmployeeDaoImpl  implements EmployeeDao{
 					m.getAddress()+"\t"+m.getPhone());
 		}*/
 		//修改
-		List<Employee> l=new EmployeeDaoImpl().selectById(7);
+		/*List<Employee> l=new EmployeeDaoImpl().selectById(7);
 		Employee[] e=l.toArray(new Employee[1]);
 		if(e.length!=0)
 		{
@@ -37,7 +43,7 @@ public class EmployeeDaoImpl  implements EmployeeDao{
 			e[0].setPosition("經理");
 			
 			new EmployeeDaoImpl().update(e[0]);			
-		}
+		}*/
 		//刪除
 		//new EmployeeDaoImpl().delete(5);
 	
@@ -120,14 +126,14 @@ public class EmployeeDaoImpl  implements EmployeeDao{
 	//修改
 	public void update(Employee e) {
 		Connection conn=DbConnection.getDb();
-		String SQL="update employee set name=?,password=?,address=?,phone=?,position=? where id=?";
+		String SQL="update employee set name=?,password=?,phone=?,address=?,position=? where id=?";
 		
 		try {
 			PreparedStatement ps=conn.prepareStatement(SQL);
 			ps.setString(1, e.getName());
 			ps.setString(2, e.getPassword());
-			ps.setString(3, e.getAddress());
-			ps.setString(4, e.getPhone());
+			ps.setString(4, e.getAddress());
+			ps.setString(3, e.getPhone());
 			ps.setString(5,e.getPosition());
 			ps.setInt(6, e.getId());
 			ps.executeUpdate();
@@ -156,6 +162,7 @@ public class EmployeeDaoImpl  implements EmployeeDao{
 				e.setPassword(rs.getString("password"));
 				e.setAddress(rs.getString("address"));
 				e.setPhone(rs.getString("phone"));
+				e.setPosition(rs.getString("position"));
 				l.add(e);
 			}			
 		} catch (SQLException x) {
@@ -182,6 +189,7 @@ public class EmployeeDaoImpl  implements EmployeeDao{
 				m.setPassword(rs.getString("password"));
 				m.setAddress(rs.getString("address"));
 				m.setPhone(rs.getString("phone"));
+				m.setPosition(rs.getString("position"));
 								
 				l.add(m);
 			}			
@@ -204,5 +212,36 @@ public class EmployeeDaoImpl  implements EmployeeDao{
 			x.printStackTrace();
 		}
 		
+	}
+
+
+	@Override
+	//關鍵字查詢
+	public List<Employee> selectByKeyWord(String keyword) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select * from employee where concat(id,employeeno,name,account,password,address,phone,position)  like ?";
+		List<Employee> l=new ArrayList();
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, "%"+keyword+"%");		
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Employee m =new Employee();
+				m.setId(rs.getInt("id"));
+				m.setEmployeeno(rs.getString("employeeno"));
+				m.setName(rs.getString("name"));
+				m.setAccount(rs.getString("account"));
+				m.setPassword(rs.getString("password"));
+				m.setAddress(rs.getString("address"));
+				m.setPhone(rs.getString("phone"));
+				m.setPosition(rs.getString("position"));
+								
+				l.add(m);
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		return l;
 	}
 }

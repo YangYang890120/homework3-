@@ -1,13 +1,14 @@
 package model;
 
 public class Orders {
-	private int id;
+	private Integer id;
 	private String orderno;
 	private String barcode;
 	private String employeeno;
 	private String memberno;
-	private int orderamount;
+	private Integer orderamount;
 	private String date;
+	private Integer sum;
 
 
 	public Orders(String orderno, String barcode, String employeeno, String memberno, int orderamount, String date) {
@@ -18,6 +19,12 @@ public class Orders {
 		this.memberno = memberno;
 		this.orderamount = orderamount;
 		this.date = date;
+	}
+	public Integer getSum() {
+		return sum;
+	}
+	public void setSum(Integer sum) {
+		this.sum = sum;
 	}
 	public String getBarcode() {
 		return barcode;

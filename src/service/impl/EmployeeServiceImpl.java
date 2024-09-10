@@ -18,7 +18,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 			JOptionPane.showMessageDialog(null, "帳號已有人使用，請重新輸入");
 		}
 		else {
-		edi.add(e);	
+			JOptionPane.showMessageDialog(null, "新增員工成功");
+			edi.add(e);	
 		}}
 
 	@Override
@@ -74,6 +75,12 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Employee[] e=l.toArray(new Employee[1]);
 		return e[0];
 		
+	}
+
+	@Override
+	public List<Employee> findByKeyWord(String keyword) {
+		List<Employee> l=edi.selectByKeyWord(keyword);
+		return l;
 	}
 
 }

@@ -9,9 +9,16 @@ public interface OrderService {
 	
 	List<Orders> selectAll();
 	
+	List<Orders> selectByDate(String date1,String date2);//
+	
+	List<Orders> selectFromView();
+	
+	Orders selectByOrderno(String orderno);
+	
 	Orders selectByid(Integer id);
 	
-	void update(Integer id,String barcode,String employeeno,String memberno,Integer orderamount,String date);
 	
-	void delete(Integer id);
+	void update(String orderno,String barcode,String employeeno,String memberno,Integer orderamount,String date);
+	
+	void delete(String  orderno);
 }

@@ -15,7 +15,7 @@ public class Employee implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Employee(String employeeno, String name, String account, String password, String address, String phone,String position) {
+	public Employee(String employeeno, String name, String account, String password, String phone, String address,String position) {
 		super();
 		this.employeeno=employeeno;
 		this.name = name;

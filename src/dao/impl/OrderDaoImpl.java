@@ -17,9 +17,8 @@ public class OrderDaoImpl implements OrderDao{
 		//新增 已測試成功
 		/*Orders o=new Orders("O011","12345678","E003","M005",50,"2024-09-05");
 		new OrderDaoImpl().addOrder(o);*/
-		//查詢 已測試成功
-		/*List<Orders> l=new OrderDaoImpl().selectOrder();
-		for(Orders o:l)
+		/*List<Orders> l2=new OrderDaoImpl().selectByDate("2024-09-04","2024-09-09");
+		for(Orders o:l2)
 		{
 			System.out.println(o.getId()
 							+"\t"+o.getOrderno()
@@ -28,6 +27,25 @@ public class OrderDaoImpl implements OrderDao{
 							+"\t"+o.getOrderamount()
 							+"\t"+o.getDate());
 		}*/
+		/*List<Orders> l=new OrderDaoImpl().selectByOrderno("O005");
+		Orders o=l.get(0);
+		System.out.println(o.getId()
+				+"\t"+o.getOrderno()
+				+"\t"+o.getEmployeeno()
+				+"\t"+o.getMemberno()
+				+"\t"+o.getOrderamount()
+				+"\t"+o.getDate());*/
+		//查詢 已測試成功
+		List<Orders> l=new OrderDaoImpl().selectFromView();
+		for(Orders o:l)
+		{
+			System.out.println(
+							"\t"+o.getOrderno()
+							+"\t"+o.getEmployeeno()
+							+"\t"+o.getMemberno()
+							+"\t"+o.getOrderamount()
+							+"\t"+o.getDate());
+		}
 		//修改 已測試成功
 		/*List<Orders> l=new OrderDaoImpl().selectById(4);
 		Orders[] o=l.toArray(new Orders[1]);
@@ -44,7 +62,7 @@ public class OrderDaoImpl implements OrderDao{
 		//刪除
 		}*/
 		
-		new OrderDaoImpl().delete(10);
+		//new OrderDaoImpl().delete("O005");
 	}
 
 	@Override
@@ -91,33 +109,7 @@ public class OrderDaoImpl implements OrderDao{
 			e.printStackTrace();
 		}
 		return l;
-	}
-	@Override
-	public List<Orders> selectByEmployeename(String employeename) {
-		Connection conn=DbConnection.getDb();
-		String SQL="select * from orders where employeename=?";
-		List<Orders> l=new ArrayList();
-		try {
-			PreparedStatement ps= conn.prepareStatement(SQL);
-			ps.setString(1, employeename);
-			ResultSet rs=ps.executeQuery();
-			while(rs.next())
-			{
-				Orders o=new Orders();
-				o.setId(rs.getInt("id"));
-				o.setOrderno(rs.getString("orderno"));
-				o.setOrderno(rs.getString("barcode"));
-				o.setOrderno(rs.getString("employeeno"));
-				o.setOrderno(rs.getString("memberno"));
-				o.setOrderno(rs.getString("orderamount"));
-				o.setOrderno(rs.getString("date"));
-				l.add(o);
-			}
-		} catch (SQLException x) {
-			x.printStackTrace();
-		}
-		return l;
-	}
+	}	
 	@Override
 	public List<Orders> selectById(Integer id) {
 		Connection conn=DbConnection.getDb();
@@ -132,11 +124,11 @@ public class OrderDaoImpl implements OrderDao{
 				Orders o=new Orders();
 				o.setId(rs.getInt("id"));
 				o.setOrderno(rs.getString("orderno"));
-				o.setOrderno(rs.getString("barcode"));
-				o.setOrderno(rs.getString("employeeno"));
-				o.setOrderno(rs.getString("memberno"));
-				o.setOrderno(rs.getString("orderamount"));
-				o.setOrderno(rs.getString("date"));
+				o.setBarcode(rs.getString("barcode"));
+				o.setEmployeeno(rs.getString("employeeno"));
+				o.setMemberno(rs.getString("memberno"));
+				o.setOrderamount(rs.getInt("orderamount"));
+				o.setDate(rs.getString("date"));
 				l.add(o);
 			}
 		} catch (SQLException x) {
@@ -147,7 +139,7 @@ public class OrderDaoImpl implements OrderDao{
 	@Override
 	public void update(Orders o) {
 		Connection conn=DbConnection.getDb();
-		String SQL="update orders set barcode=?,employeeno=?,memberno=?,orderamount=?,date=? where id=?";
+		String SQL="update orders set barcode=?,employeeno=?,memberno=?,orderamount=?,date=? where orderno=?";
 		try {
 			PreparedStatement ps=conn.prepareStatement(SQL);
 			ps.setString(1, o.getBarcode());
@@ -155,23 +147,105 @@ public class OrderDaoImpl implements OrderDao{
 			ps.setString(3, o.getMemberno());
 			ps.setInt(4, o.getOrderamount());
 			ps.setString(5,o.getDate());
-			ps.setInt(6, o.getId());
+			ps.setString(6, o.getOrderno());
 			ps.executeUpdate();
 		} catch (SQLException x) {
 			x.printStackTrace();
 		}
 	}
 	@Override
-	public void delete(Integer id) {
+	public void delete(String orderno) {
 		Connection conn=DbConnection.getDb();
-		String SQL="delete from orders where id=?";
+		String SQL="delete from orders where orderno=?";
 		try {
 			PreparedStatement ps=conn.prepareStatement(SQL);
-			ps.setInt(1, id);
+			ps.setString(1, orderno);
 			ps.executeUpdate();
 		} catch (SQLException x) {
 			x.printStackTrace();
 		}
 	}
 
+	@Override
+	public List<Orders> selectByOrderno(String Orderno) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select * from orders where orderno=?";
+		List<Orders> l=new ArrayList();
+		try {
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			ps.setString(1, Orderno);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Orders o=new Orders();
+				o.setId(rs.getInt("id"));
+				o.setOrderno(rs.getString("orderno"));
+				o.setBarcode(rs.getString("barcode"));
+				o.setEmployeeno(rs.getString("employeeno"));
+				o.setMemberno(rs.getString("memberno"));
+				o.setOrderamount(rs.getInt("orderamount"));
+				o.setDate(rs.getString("date"));
+				l.add(o);
+			}
+		} catch (SQLException x) {
+			x.printStackTrace();
+		}
+		return l;
+	}
+
+	@Override
+	public List<Orders> selectByDate(String date1, String date2) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select *from ordersticket where date between ? and ?";
+		List<Orders> l=new ArrayList();
+		try {
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			ps.setString(1, date1);
+			ps.setString(2, date2);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Orders o=new Orders();
+				o.setOrderno(rs.getString("orderno"));
+				o.setBarcode(rs.getString("productname"));
+				o.setEmployeeno(rs.getString("name"));
+				o.setMemberno(rs.getString("membername"));
+				o.setOrderamount(rs.getInt("orderAmount"));
+				o.setSum(rs.getInt("sum"));
+				o.setDate(rs.getString("date"));
+				l.add(o);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return l;
+	}
+
+	@Override
+	public List<Orders> selectFromView() {
+		Connection conn=DbConnection.getDb();
+		String SQL="select * from ordersticket";
+		List<Orders> l=new ArrayList();
+		try {
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Orders o=new Orders();
+				//o.setId(rs.getInt("id"));
+				o.setOrderno(rs.getString("orderno"));
+				o.setBarcode(rs.getString("productname"));
+				o.setEmployeeno(rs.getString("name"));
+				o.setMemberno(rs.getString("membername"));
+				o.setOrderamount(rs.getInt("orderAmount"));
+				o.setDate(rs.getString("date"));
+				l.add(o);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return l;
+	}
 }

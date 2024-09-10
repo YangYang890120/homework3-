@@ -33,8 +33,8 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public void update(Integer id,String barcode, String employeeno, String memberno, Integer orderamount, String date) {
-		Orders o=selectByid(id);
+	public void update(String orderno,String barcode, String employeeno, String memberno, Integer orderamount, String date) {
+		Orders o=selectByOrderno(orderno);
 		
 		o.setBarcode(barcode);
 		o.setEmployeeno(employeeno);
@@ -46,9 +46,29 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public void delete(Integer id) {
-		odi.delete(id);
+	public void delete(String Orderno) {
+		odi.delete(Orderno);
 		
+	}
+
+	@Override
+	public Orders selectByOrderno(String orderno) {
+		List<Orders> l=odi.selectByOrderno(orderno);
+		Orders[] o=l.toArray(new Orders[1]);
+		return o[0];
+	}
+
+	@Override
+	public List<Orders> selectByDate(String date1, String date2) {
+		List<Orders> l=odi.selectByDate(date1,date2);
+		
+		return l;
+	}
+
+	@Override
+	public List<Orders> selectFromView() {
+		List<Orders> l=odi.selectFromView();
+		return l;
 	}
 
 }

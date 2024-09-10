@@ -170,5 +170,35 @@ public class MemberDaoImpl implements MemberDao{
 			e.printStackTrace();
 		}
 	}
+	@Override
+	public List<Member> selectByKeyWord(String keyword) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select * from member where concat(id,memberno,membername,account,password,address,phone,membership)  like ?";
+		List<Member> l=new ArrayList();
+		
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1,keyword);
+			ResultSet rs=ps.executeQuery();		
+			
+			while(rs.next())
+			{
+				Member m=new Member();
+				m.setId(rs.getInt("id"));
+				m.setMemberno(rs.getString("memberno"));
+				m.setMembername(rs.getString("membername"));
+				m.setAccount(rs.getString("account"));
+				m.setPassword(rs.getString("password"));
+				m.setPhone(rs.getString("phone"));
+				m.setAddress(rs.getString("address"));
+				m.setMembership(rs.getString("membership"));				
+				l.add(m);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return l;
+		
+	}
 
 }

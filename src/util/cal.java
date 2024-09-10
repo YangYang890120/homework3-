@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.event.FocusListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -9,7 +10,7 @@ import java.io.ObjectOutputStream;
 
 import model.Employee;
 
-public class cal {
+public class cal  {
 	//存檔
 	public static void SaveObject(Object o,String fileName)
 	{
@@ -40,5 +41,4 @@ public class cal {
 		}
 		return o;
 	}
-	
 }

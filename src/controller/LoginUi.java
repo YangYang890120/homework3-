@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import model.Employee;
 import service.impl.EmployeeServiceImpl;
+import util.JTextFieldHintListener;
 import util.cal;
 
 import java.awt.Color;
@@ -74,12 +75,17 @@ public class LoginUi extends JFrame {
 		panel.add(lblNewLabel_1);
 		
 		account = new JTextField();
+		account.setText("Account");
 		account.setBounds(163, 81, 96, 21);
+		account.addFocusListener(new JTextFieldHintListener(account,"Account"));
 		panel.add(account);
 		account.setColumns(10);
 		
 		password = new JPasswordField();
+		password.setText("Password");
+		password.addFocusListener(new JTextFieldHintListener(password,"Password"));
 		password.setBounds(163, 139, 96, 21);
+		
 		panel.add(password);
 		
 		JButton login = new JButton("登入");
@@ -115,11 +121,7 @@ public class LoginUi extends JFrame {
 		login.setBounds(172, 197, 87, 23);
 		panel.add(login);
 		
-		JButton btnNewButton_1 = new JButton("忘記密碼");
-		btnNewButton_1.setBounds(317, 197, 87, 23);
-		panel.add(btnNewButton_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("後端管理系統");
+		JLabel lblNewLabel_2 = new JLabel("倉儲管理系統");
 		lblNewLabel_2.setFont(new Font("新細明體", Font.PLAIN, 30));
 		lblNewLabel_2.setBounds(118, 10, 256, 48);
 		panel.add(lblNewLabel_2);

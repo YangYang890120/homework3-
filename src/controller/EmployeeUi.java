@@ -12,6 +12,7 @@ import javax.swing.table.TableModel;
 import model.Employee;
 import model.Member;
 import service.impl.EmployeeServiceImpl;
+import util.JTextFieldHintListener;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -26,6 +27,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import java.awt.Choice;
+import java.awt.Color;
+
 import javax.swing.JTable;
 import java.awt.Button;
 
@@ -60,6 +63,7 @@ public class EmployeeUi extends JFrame {
 	private JTextField account;
 	private JLabel lblNewLabel_5;
 	private JComboBox position;
+	private JTextField keyword;
 
 	/**
 	 * Launch the application.
@@ -97,97 +101,99 @@ public class EmployeeUi extends JFrame {
 		contentPane.setLayout(null);
 
 		employeePane = new JPanel();
-		employeePane.setBounds(0, 0, 960, 500);
+		employeePane.setBounds(0, 0, 960, 462);
 		employeePane.setLayout(null);
 		contentPane.add(employeePane);
 
 		JLabel lblNewLabel = new JLabel("姓名");
-		lblNewLabel.setBounds(483, 38, 42, 20);
+		lblNewLabel.setBounds(481, 47, 42, 20);
 		lblNewLabel.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("編號");
-		lblNewLabel_1.setBounds(274, 38, 42, 20);
+		lblNewLabel_1.setBounds(272, 47, 42, 20);
 		lblNewLabel_1.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lblNewLabel_1);
 
 		employeeno = new JTextField();
-		employeeno.setBounds(337, 38, 96, 21);
-		employeePane.add(employeeno);
 		employeeno.setColumns(10);
+		employeeno.setText("E000");
+		employeeno.setBounds(335, 47, 96, 21);
+		employeeno.addFocusListener(new JTextFieldHintListener(employeeno,"E000"));
+		employeePane.add(employeeno);
 
 		employeename = new JTextField();
-		employeename.setBounds(557, 38, 96, 21);
+		employeename.setBounds(555, 47, 96, 21);
 		employeePane.add(employeename);
 		employeename.setColumns(10);
 
 		lblNewLabel_2 = new JLabel("密碼");
-		lblNewLabel_2.setBounds(64, 105, 42, 20);
+		lblNewLabel_2.setBounds(62, 114, 42, 20);
 		lblNewLabel_2.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lblNewLabel_2);
 
 		password = new JTextField();
-		password.setBounds(116, 105, 96, 21);
+		password.setBounds(114, 114, 96, 21);
 		employeePane.add(password);
 		password.setColumns(10);
 
 		lblNewLabel_3 = new JLabel("地址");
-		lblNewLabel_3.setBounds(483, 106, 42, 20);
+		lblNewLabel_3.setBounds(481, 114, 42, 20);
 		lblNewLabel_3.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lblNewLabel_3);
 
 		address = new JTextField();
-		address.setBounds(557, 105, 96, 21);
+		address.setBounds(555, 114, 96, 21);
 		employeePane.add(address);
 		address.setColumns(10);
 
 		lblNewLabel_4 = new JLabel("電話");
-		lblNewLabel_4.setBounds(274, 105, 42, 20);
+		lblNewLabel_4.setBounds(272, 114, 42, 20);
 		lblNewLabel_4.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lblNewLabel_4);
 
 		phone = new JTextField();
-		phone.setBounds(337, 105, 96, 21);
+		phone.setBounds(335, 114, 96, 21);
 		employeePane.add(phone);
 		phone.setColumns(10);
 
 		lableposition = new JLabel("職位");
-		lableposition.setBounds(696, 105, 53, 20);
+		lableposition.setBounds(669, 114, 53, 20);
 		lableposition.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lableposition);
 
 		lblNewLabel_6 = new JLabel("員工管理");
-		lblNewLabel_6.setBounds(10, 10, 71, 21);
-		lblNewLabel_6.setFont(new Font("新細明體", Font.PLAIN, 16));
+		lblNewLabel_6.setBounds(10, 10, 73, 27);
+		lblNewLabel_6.setFont(new Font("新細明體", Font.PLAIN, 18));
 		employeePane.add(lblNewLabel_6);
 
 		lblNewLabel_7 = new JLabel("ID");
-		lblNewLabel_7.setBounds(64, 38, 42, 20);
+		lblNewLabel_7.setBounds(62, 47, 42, 20);
 		lblNewLabel_7.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lblNewLabel_7);
 
 		id = new JTextField();
-		id.setBounds(116, 38, 96, 21);
+		id.setBounds(114, 47, 96, 21);
 		employeePane.add(id);
 		id.setColumns(10);
 
 		account = new JTextField();
-		account.setBounds(748, 38, 96, 21);
+		account.setBounds(746, 47, 96, 21);
 		employeePane.add(account);
 		account.setColumns(10);
 
 		lblNewLabel_5 = new JLabel("帳號");
-		lblNewLabel_5.setBounds(696, 38, 42, 20);
+		lblNewLabel_5.setBounds(669, 47, 42, 20);
 		lblNewLabel_5.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(lblNewLabel_5);
 
 		position = new JComboBox();
-		position.setBounds(748, 104, 96, 20);
+		position.setBounds(746, 114, 96, 20);
 		position.setModel(new DefaultComboBoxModel(new String[] { "總經理", "經理", "員工" }));
 		employeePane.add(position);
 
 		JButton btnNewButton = new JButton("新增");
-		btnNewButton.setBounds(64, 161, 87, 23);
+		btnNewButton.setBounds(62, 157, 87, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addEm();
@@ -198,7 +204,7 @@ public class EmployeeUi extends JFrame {
 		employeePane.add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("修改");
-		btnNewButton_1.setBounds(483, 161, 87, 23);
+		btnNewButton_1.setBounds(555, 157, 87, 23);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateEm();
@@ -209,17 +215,17 @@ public class EmployeeUi extends JFrame {
 		employeePane.add(btnNewButton_1);
 
 		JButton btnNewButton_2 = new JButton("查詢");
-		btnNewButton_2.setBounds(274, 161, 87, 23);
+		btnNewButton_2.setBounds(246, 157, 87, 23);
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loadDataToTable();
+				findByKeyWord();
 			}
 		});
 		btnNewButton_2.setFont(new Font("新細明體", Font.PLAIN, 16));
 		employeePane.add(btnNewButton_2);
 
 		JButton btnNewButton_3 = new JButton("刪除");
-		btnNewButton_3.setBounds(696, 161, 87, 23);
+		btnNewButton_3.setBounds(746, 157, 87, 23);
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				deleteEm();
@@ -238,6 +244,13 @@ public class EmployeeUi extends JFrame {
 		table.setFont(new Font("微軟正黑體", Font.PLAIN, 12));
 		scrollPane.setViewportView(table);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		keyword = new JTextField();
+		keyword.setText("關鍵字");
+		keyword.setBounds(335, 158, 96, 21);
+		keyword.addFocusListener(new JTextFieldHintListener(keyword,"關鍵字"));
+		employeePane.add(keyword);
+		keyword.setColumns(10);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -252,6 +265,7 @@ public class EmployeeUi extends JFrame {
 					phone.setText(model.getValueAt(selectedRow, 5).toString());
 					address.setText(model.getValueAt(selectedRow, 6).toString());
 					position.setSelectedItem(model.getValueAt(selectedRow, 7).toString());
+					employeeno.setForeground(Color.BLACK);
 				}
 			}
 		});
@@ -330,13 +344,20 @@ public class EmployeeUi extends JFrame {
 		table.setModel(model);
 		table.setDefaultEditor(Object.class, null);
 	}
-
+	public void findByKeyWord() {
+		String Keyword=keyword.getText();
+		System.out.println(Keyword);
+		List<Employee> employeeList = esi.findByKeyWord(Keyword);
+		DefaultTableModel model = convertListToTableModel(employeeList);
+		table.setModel(model);
+		table.setDefaultEditor(Object.class, null);
+	}
 	public void clear() {
 
 		id.setText("");
 		employeeno.setText("");
 		employeename.setText("");
-		id.setText("");
+		account.setText("");
 		password.setText("");
 		phone.setText("");
 		address.setText("");

@@ -14,6 +14,8 @@ public interface EmployeeService {
 	
 	List<Employee> AllEmployee();//查詢員工
 	
+	List<Employee> findByKeyWord(String keyword);
+	
 	Employee findById(int id);
 	//修改
 	void update(int id,String name,String password,String phone,String address,String position);

@@ -2,7 +2,10 @@ package service.impl;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import dao.impl.MemberDaoImpl;
+import model.Employee;
 import model.Member;
 import service.MemberService;
 
@@ -15,7 +18,16 @@ public class MemberServiceImpl implements MemberService{
 
 	MemberDaoImpl mdi=new MemberDaoImpl();
 	public void add(Member m) {
-		mdi.addMember(m);
+		List<Member> ln=mdi.selectByAccount(m.getAccount());
+		Member[] en=ln.toArray(new Member[0]);
+		if(en.length!=0) {
+			JOptionPane.showMessageDialog(null, "帳號已有人使用，請重新輸入");
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "新增會員成功");
+			mdi.addMember(m);
+		}
+		
 		
 	}
 
@@ -47,6 +59,12 @@ public class MemberServiceImpl implements MemberService{
 	public void delete(int id) {
 		mdi.delete(id);
 		
+	}
+
+	@Override
+	public List<Member> findBykeyWord(String keyword) {
+		List<Member> l=mdi.selectByKeyWord(keyword);
+		return l;
 	}
 
 }
