@@ -17,7 +17,7 @@ public class MemberDaoImpl implements MemberDao{
 		/*Member m =new Member("m006","jack","ddd","123","000","台北","鑽石");
 		new MemberDaoImpl().addMember(m);*/
 		
-		/*List<Member> l=new MemberDaoImpl().selectAll();
+		List<Member> l=new MemberDaoImpl().selectByKeyWord("123");
 		for(Member m:l)
 		{
 			System.out.println(m.getId()+
@@ -28,7 +28,7 @@ public class MemberDaoImpl implements MemberDao{
 					"\t"+m.getAddress()+
 					"\t"+m.getPhone()+
 					"\t"+m.getMembership());
-		}*/
+		}
 		/*List<Member> l=new MemberDaoImpl().selectByAccount("aaa");
 		Member m=l.get(0);
 		System.out.println(m.getId()+
@@ -178,7 +178,7 @@ public class MemberDaoImpl implements MemberDao{
 		
 		try {
 			PreparedStatement ps=conn.prepareStatement(SQL);
-			ps.setString(1,keyword);
+			ps.setString(1,"%"+keyword+"%");
 			ResultSet rs=ps.executeQuery();		
 			
 			while(rs.next())

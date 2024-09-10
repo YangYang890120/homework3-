@@ -345,12 +345,19 @@ public class EmployeeUi extends JFrame {
 		table.setDefaultEditor(Object.class, null);
 	}
 	public void findByKeyWord() {
+		
 		String Keyword=keyword.getText();
-		System.out.println(Keyword);
-		List<Employee> employeeList = esi.findByKeyWord(Keyword);
-		DefaultTableModel model = convertListToTableModel(employeeList);
-		table.setModel(model);
-		table.setDefaultEditor(Object.class, null);
+		if(Keyword.equals("關鍵字"))
+		{
+			loadDataToTable();
+		}
+		else
+		{
+			List<Employee> employeeList = esi.findByKeyWord(Keyword);
+			DefaultTableModel model = convertListToTableModel(employeeList);
+			table.setModel(model);
+			table.setDefaultEditor(Object.class, null);	
+		}
 	}
 	public void clear() {
 

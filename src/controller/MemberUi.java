@@ -210,7 +210,7 @@ public class MemberUi extends JFrame {
 		JButton btnNewButton_2 = new JButton("查詢");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loadDataToTable();
+				findByKeyWord();
 			}
 		});
 		btnNewButton_2.setFont(new Font("新細明體", Font.PLAIN, 16));
@@ -282,6 +282,21 @@ public class MemberUi extends JFrame {
 		DefaultTableModel model = convertListToTableModel(memberList);
 		table.setModel(model);
 		table.setDefaultEditor(Object.class, null);
+	}
+	public void findByKeyWord() {
+		
+		String Keyword=keyword.getText();
+		if(Keyword.equals("關鍵字"))
+		{
+			loadDataToTable();
+		}
+		else
+		{
+			List<Member> MemberList = msi.findBykeyWord(Keyword);
+			DefaultTableModel model = convertListToTableModel(MemberList);
+			table.setModel(model);
+			table.setDefaultEditor(Object.class, null);	
+		}
 	}
 	public void update()//用account判斷帳號是否存在 並存取資料進行修改
 	{
