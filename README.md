@@ -6,9 +6,6 @@
 ### 基本架構
 ![image](https://github.com/user-attachments/assets/6dc4c132-8ff0-4eac-b352-2a8ee5a854d7)
 
-### 使用手冊
-<https://github.com/YangYang890120/homework3-/blob/main/%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8A.pdf>
-
 ### 基本功能
 ```
  1.登入,登出
@@ -18,8 +15,15 @@
  5.關鍵字查詢,日期區間查詢
  6.列印報表
 ```
+
 > [!NOTE]
 > 在新增,修改進貨或出貨時,存貨也會同步進行動態更新
+> 
+### 使用手冊
+<https://github.com/YangYang890120/homework3-/blob/main/%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8A.pdf>
+
+
+
 
 ### 新功能
 > 1.新增 JMenuBar 增加切換頁面的方式,可從上方選擇頁面進行切換。
