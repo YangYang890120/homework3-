@@ -7,10 +7,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="image"/>
-	<classpathentry kind="lib" path="com.jgoodies.forms_1.9.0.v20240327-0800.jar"/>
-	<classpathentry kind="lib" path="com.jgoodies.common_1.8.1.v20240327-0800.jar"/>
-	<classpathentry kind="lib" path="com.miglayout.swing_11.3.0.jar"/>
-	<classpathentry kind="lib" path="com.miglayout.core_11.3.0.jar"/>
 	<classpathentry kind="lib" path="C:/javaOcp/yang/mysql/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar"/>
 	<classpathentry kind="lib" path="C:/javaOcp/jcalendar/lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>

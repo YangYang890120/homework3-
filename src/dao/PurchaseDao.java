@@ -16,6 +16,10 @@ public interface PurchaseDao {
 	List<Purchase> selectFromView();
 	//出貨編號篩選
 	List<Purchase> selectByPurchaseno(String purchasesno);
+	//關鍵字查詢
+	List<Purchase> selectByKeyWord(String keyword);
+	List<Purchase> selectByKeyWord(String keyword,String date1,String date2);
+	
 	//新增
 	void update(Purchase p);
 	//刪除

@@ -13,6 +13,10 @@ public interface OrderService {
 	
 	List<Orders> selectFromView();
 	
+	List<Orders> selectByKeyWord(String keyword);
+	
+	List<Orders> selectByKeyWord(String keyword,String date1,String date2);
+	
 	Orders selectByOrderno(String orderno);
 	
 	Orders selectByid(Integer id);

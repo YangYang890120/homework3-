@@ -214,7 +214,7 @@ public class OrderUi extends JFrame {
 		JButton btnNewButton_2 = new JButton("修改");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				update();
+				updateToProduct();
 				loadDataToTable();
 			}
 		});
@@ -312,8 +312,9 @@ public class OrderUi extends JFrame {
 			Orders o = new Orders(Orderno, Barcode, Employee, member, orderAmount, DateString);
 			if(psi.findBarcode(Barcode))
 			{
+				
 				osi.addOrder(o);
-				updateToProduct();
+				addToProduct();
 				JOptionPane.showMessageDialog(null, "出貨資料新增成功,已將出貨數量從存貨扣除");
 			}
 			else
@@ -352,7 +353,7 @@ public class OrderUi extends JFrame {
 		orders+=" ------------------------------------------------------------------------------------------- 總金額:"+Sum;
 		output.setText(orders);
 	}
-	public void updateToProduct()
+	public void addToProduct()
 	{
 		Integer Orderamount =Integer.parseInt(orderamount.getText());
 		String Barcode=barcode.getText();
@@ -365,6 +366,45 @@ public class OrderUi extends JFrame {
 		else {
 			psi.updateByOrderamount(Barcode,(p.getAmount()-Orderamount));
 			clear();
+		}		
+	}
+	public void updateToProduct()
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Integer Orderamount =Integer.parseInt(orderamount.getText());
+		String Barcode=barcode.getText();
+		String Orderno=orderno.getText();
+		String Employee=employeeno.getText();
+		String Memberno=memberno.getText();
+		Date Date= date.getDate();
+		String DateString = sdf.format(Date);
+		Product p=psi.findByBarcode(Barcode);
+		Orders o=osi.selectByOrderno(Orderno);
+		if (Orderno.isEmpty() ||Barcode.isEmpty() || Employee.isEmpty() || Memberno.isEmpty() || Orderamount.equals(0)
+				|| DateString.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "資料不可空白，請填寫完整", "錯誤", JOptionPane.ERROR_MESSAGE);
+			return;
+		} else {
+			
+		}
+		if((p.getAmount()-(Orderamount-o.getOrderamount()))<0)
+		{
+			JOptionPane.showMessageDialog(this, "修改後出貨數量不可大於存貨", "錯誤", JOptionPane.ERROR_MESSAGE);
+			
+		}
+		else {
+			if(psi.findBarcode(Barcode))
+			{
+				psi.updateByOrderamount(Barcode,(p.getAmount()-(Orderamount-o.getOrderamount())));
+				osi.update(Orderno,Barcode,Employee,Memberno,Orderamount,DateString);
+				JOptionPane.showMessageDialog(null, "出貨資料修改成功,已將修改後數量與存貨同步更新");
+				clear();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, "查無此商品條碼", "錯誤", JOptionPane.ERROR_MESSAGE);
+			}
+			
 		}		
 	}
 	
@@ -387,19 +427,18 @@ public class OrderUi extends JFrame {
 			} else {
 				if(psi.findBarcode(Barcode))
 				{
-					JOptionPane.showMessageDialog(null, "出貨資料修改成功");
+					
+					
+					updateToProduct();
+					
 					osi.update(Orderno,Barcode,Employee,Memberno,OrderAmount,DateString);
+					JOptionPane.showMessageDialog(null, "出貨資料修改成功,已將修改後數量與存貨同步更新");
 					clear();
 				}
 				else
 				{
 					JOptionPane.showMessageDialog(this, "查無此商品條碼", "錯誤", JOptionPane.ERROR_MESSAGE);
-				}
-				
-				
-			}
-		}
-	}
+		}}}}
 	public void delete()
 	{
 		if (orderno.getText() != "") {
@@ -432,7 +471,6 @@ public class OrderUi extends JFrame {
 			model.addRow(rowData);
 		}
 		return model;
-
 	}
 	public void loadDataToTable() {
 		List<Orders> OrdersList = osi.selectAll();

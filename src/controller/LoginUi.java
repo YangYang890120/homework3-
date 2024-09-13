@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.JTextArea;
 
 public class LoginUi extends JFrame {
 
@@ -50,6 +51,7 @@ public class LoginUi extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginUi() {
+		setTitle("登入畫面");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -66,12 +68,12 @@ public class LoginUi extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("帳號");
 		lblNewLabel.setFont(new Font("新細明體", Font.PLAIN, 20));
-		lblNewLabel.setBounds(88, 66, 85, 48);
+		lblNewLabel.setBounds(88, 66, 65, 48);
 		panel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("密碼");
 		lblNewLabel_1.setFont(new Font("新細明體", Font.PLAIN, 20));
-		lblNewLabel_1.setBounds(88, 124, 85, 48);
+		lblNewLabel_1.setBounds(88, 124, 65, 48);
 		panel.add(lblNewLabel_1);
 		
 		account = new JTextField();
@@ -125,5 +127,12 @@ public class LoginUi extends JFrame {
 		lblNewLabel_2.setFont(new Font("新細明體", Font.PLAIN, 30));
 		lblNewLabel_2.setBounds(118, 10, 256, 48);
 		panel.add(lblNewLabel_2);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		textArea.setBackground(new Color(192, 192, 192));
+		textArea.setText("權限:\r\n總經理->全部功能\r\n經理->全部功能\r\n員工->進銷存管理\r\n-------------------\r\n帳號|密碼|職位\r\nbbc|123|總經理\r\nkin|156|員工");
+		textArea.setBounds(279, 67, 125, 153);
+		panel.add(textArea);
 	}
 }

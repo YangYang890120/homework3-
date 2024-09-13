@@ -63,4 +63,16 @@ public class PurchaseServiceImpl implements PurchaseService{
 		
 	}
 
+	@Override
+	public List<Purchase> selectByKeyWord(String keyword) {
+		List<Purchase> l=pdi.selectByKeyWord(keyword);
+		return l;
+	}
+
+	@Override
+	public List<Purchase> selectByKeyWord(String keyword, String date1, String date2) {
+		List<Purchase> l=pdi.selectByKeyWord(keyword,date1,date2);
+		return l;
+	}
+
 }

@@ -20,6 +20,9 @@ public interface OrderDao {
 	List<Orders> selectByDate(String date1,String date2);
 	//查詢views
 	List<Orders> selectFromView();
+	//關鍵字查詢
+	List<Orders> selectByKeyWord(String keyword);
+	List<Orders> selectByKeyWord(String keyword,String date1,String date2);
 	//新增(會用出貨編號選擇
 	void update(Orders o);
 	//刪除 用出貨編號選擇

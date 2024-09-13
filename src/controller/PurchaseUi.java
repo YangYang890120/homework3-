@@ -138,7 +138,7 @@ public class PurchaseUi extends JFrame {
 		en.setBounds(109, 167, 99, 21);
 		panel.add(en);
 		
-		JLabel lblNewLabel_1_4 = new JLabel("出貨數量");
+		JLabel lblNewLabel_1_4 = new JLabel("進貨數量");
 		lblNewLabel_1_4.setFont(new Font("新細明體", Font.PLAIN, 16));
 		lblNewLabel_1_4.setBounds(20, 212, 79, 27);
 		panel.add(lblNewLabel_1_4);
@@ -162,7 +162,6 @@ public class PurchaseUi extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addPu();
-				updateToProduct();
 				loadDataToTable();
 			}
 		});
@@ -183,7 +182,7 @@ public class PurchaseUi extends JFrame {
 		JButton btnNewButton_2 = new JButton("修改");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				update();
+				updateToProduct();
 				loadDataToTable();
 			}
 		});
@@ -218,8 +217,7 @@ public class PurchaseUi extends JFrame {
 					barcode.setText(model.getValueAt(selectedRow, 1).toString());
 					en.setText(model.getValueAt(selectedRow, 2).toString());
 					pa.setText(model.getValueAt(selectedRow, 3).toString());
-					String Date=model.getValueAt(selectedRow, 4).toString();
-					System.out.println(Date);
+					//String Date=model.getValueAt(selectedRow, 4).toString();
 					//date.setDateFormatString(Date);
 					pn.setForeground(Color.BLACK);
 					barcode.setForeground(Color.BLACK);
@@ -304,7 +302,7 @@ public class PurchaseUi extends JFrame {
 			{
 				Purchase p = new Purchase(Purchaseno, Barcode, Employee, PurchaseAmount, DateString);
 				pusi.addPurchase(p);
-				updateToProduct();
+				addToProduct();
 				JOptionPane.showMessageDialog(null, "進貨資料新增成功,已將進貨數量加入存貨");
 			}
 			else
@@ -344,9 +342,10 @@ public class PurchaseUi extends JFrame {
 		Purchase+=" -------------------------------------------------------------------------------------- 總金額:"+Sum;
 		output.setText(Purchase);
 	}
-	public void updateToProduct()
+	public void addToProduct()
 	{
 		Integer PurchaseAmount =Integer.parseInt(pa.getText());
+		System.out.println(PurchaseAmount);
 		String Barcode=barcode.getText();
 		Product p=psi.findByBarcode(Barcode);		
 		psi.updateByOrderamount(Barcode,(p.getAmount()+PurchaseAmount));
@@ -369,7 +368,35 @@ public class PurchaseUi extends JFrame {
 			} else {
 				if(psi.findBarcode(Barcode))
 				{
+					JOptionPane.showMessageDialog(null, "進貨資料新增成功");
+					pusi.update(Purchaseno,Barcode,Employee,PurchaseAmount,DateString);
+					clear();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(this, "查無此商品條碼", "錯誤", JOptionPane.ERROR_MESSAGE);
+		}}}}
+	public void updateToProduct(){
+		if(pn.getText()!="")
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String Purchaseno=pn.getText();
+			String Barcode=barcode.getText();
+			String Employee=en.getText();
+			Integer PurchaseAmount=Integer.parseInt(pa.getText());
+			Date Date= date.getDate();
+			String DateString = sdf.format(Date);
+			Purchase pu=pusi.selectByPurchaseno(Purchaseno);
+			Product p=psi.findByBarcode(Barcode);
+			if (Purchaseno.isEmpty() ||Barcode.isEmpty() || Employee.isEmpty() || PurchaseAmount.equals(0)|| DateString.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "資料不可空白，請填寫完整", "錯誤", JOptionPane.ERROR_MESSAGE);
+				return;
+			} else {
+			
+				if(psi.findBarcode(Barcode))
+				{
 					JOptionPane.showMessageDialog(null, "進貨資料修改成功");
+					psi.updateByOrderamount(Barcode, p.getAmount()+(PurchaseAmount-pu.getPurchaseAmount()));
 					pusi.update(Purchaseno,Barcode,Employee,PurchaseAmount,DateString);
 					clear();
 				}
@@ -422,12 +449,11 @@ public class PurchaseUi extends JFrame {
 	}
 	public void clear()
 	{
-//		orderno.setText("");
-//		barcode.setText("");
-//		employeeno.setText("");
-//		memberno.setText("");
-//		orderamount.setText("");
-//		date.setDateFormatString("");
+		pn.setText("");
+		barcode.setText("");
+		en.setText("");
+		pa.setText("");
+		date.setDateFormatString("");
 	}
 	}
 

@@ -6,23 +6,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+
 
 import dao.impl.EmployeeDaoImpl;
 import model.Employee;
 import service.impl.EmployeeServiceImpl;
 import util.cal;
 
-import com.jgoodies.forms.layout.FormSpecs;
+//import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +35,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
 import javax.swing.ImageIcon;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
+import com.toedter.components.JLocaleChooser;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
 
 public class ManageSystem extends JFrame {
 
@@ -49,6 +52,8 @@ public class ManageSystem extends JFrame {
 	public JButton btnNewButton;
 	public JButton btnNewButton_1;
 	public JPanel main_panel;
+	public Object o=cal.ReadObiect("Employee.txt");
+	public Employee m=(Employee)o;
 
 	/**
 	 * Launch the application.
@@ -77,8 +82,163 @@ public class ManageSystem extends JFrame {
 		time.setText(FDT);					
 	}
 	public ManageSystem() {
+		setTitle("OO倉儲管理系統");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1239, 587);
+		
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("管理頁面");
+		mnNewMenu.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 12));
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("切換使用者");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginUi lu=new LoginUi();
+				lu.setVisible(true);
+				dispose();
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_5);
+		
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("離開");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_6);
+		
+		JMenu mnNewMenu_1 = new JMenu("員工管理");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("員工資料");
+		mnNewMenu_1.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(m.getPosition().equals("員工"))
+				{
+					JOptionPane.showMessageDialog(contentPane, "權限不足,只有經理及總經理才可修改", "錯誤", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					main_panel.setVisible(true);
+					main_panel.removeAll();
+			        main_panel.repaint();
+			        main_panel.revalidate();
+			        main_panel.add(new EmployeeUi().employeePane);
+			        main_panel.repaint();
+			        main_panel.revalidate();
+				}}});
+		
+		JMenu mnNewMenu_2 = new JMenu("會員管理");
+		menuBar.add(mnNewMenu_2);
+		
+		mnNewMenu_2.setVisible(false);
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("會員資料");
+		mnNewMenu_2.add(mntmNewMenuItem_1);
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(m.getPosition().equals("員工"))
+				{
+					JOptionPane.showMessageDialog(contentPane, "權限不足,只有經理及總經理才可修改", "錯誤", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					main_panel.setVisible(true);
+					main_panel.removeAll();
+			        main_panel.repaint();
+			        main_panel.revalidate();
+			        main_panel.add(new MemberUi().panel);
+			        main_panel.repaint();
+			        main_panel.revalidate();
+				}}});
+		
+		JMenu mnNewMenu_3 = new JMenu("庫存管理");
+		menuBar.add(mnNewMenu_3);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("庫存資料");
+		mnNewMenu_3.add(mntmNewMenuItem_2);
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_panel.setVisible(true);
+				main_panel.removeAll();
+		        main_panel.repaint();
+		        main_panel.revalidate();
+		        main_panel.add(new ProductUi().panel);
+		        main_panel.repaint();
+		        main_panel.revalidate();
+			}
+		});
+		
+		JMenu mnNewMenu_4 = new JMenu("出貨管理");
+		menuBar.add(mnNewMenu_4);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("出貨資料");
+		mnNewMenu_4.add(mntmNewMenuItem_3);
+		
+		JMenuItem mntmNewMenuItem_7 = new JMenuItem("查詢出貨");
+		mntmNewMenuItem_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_panel.setVisible(true);
+				main_panel.removeAll();
+		        main_panel.repaint();
+		        main_panel.revalidate();
+		        main_panel.add(new SerchOrders().panel);
+		        main_panel.repaint();
+		        main_panel.revalidate();
+			}
+		});
+		mnNewMenu_4.add(mntmNewMenuItem_7);
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_panel.setVisible(true);
+				main_panel.removeAll();
+		        main_panel.repaint();
+		        main_panel.revalidate();
+		        main_panel.add(new OrderUi().panel);
+		        main_panel.repaint();
+		        main_panel.revalidate();
+			}	
+		});
+		
+		JMenu mnNewMenu_5 = new JMenu("進貨管理");
+		menuBar.add(mnNewMenu_5);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("進貨資料");
+		mnNewMenu_5.add(mntmNewMenuItem_4);
+		
+		JMenuItem mntmNewMenuItem_8 = new JMenuItem("查詢進貨");
+		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_panel.setVisible(true);
+				main_panel.removeAll();
+		        main_panel.repaint();
+		        main_panel.revalidate();
+		        main_panel.add(new SerchPurchase().panel);
+		        main_panel.repaint();
+		        main_panel.revalidate();
+				
+			}
+		});
+		mnNewMenu_5.add(mntmNewMenuItem_8);
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_panel.setVisible(true);
+				main_panel.removeAll();
+		        main_panel.repaint();
+		        main_panel.revalidate();
+		        main_panel.add(new PurchaseUi().panel);
+		        main_panel.repaint();
+		        main_panel.revalidate();
+			}
+		});
+	
+		JMenuBar menuBar_1 = new JMenuBar();
+		menuBar.add(menuBar_1);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -97,16 +257,9 @@ public class ManageSystem extends JFrame {
 		main_panel.setBounds(247, 60, 950, 462);
 		panel.add(main_panel);
 		main_panel.setLayout(null);
-	
-		main_panel.removeAll();
-		main_panel.repaint();
-		main_panel.revalidate();
 		main_panel.setVisible(false);
-		main_panel.repaint();
-		main_panel.revalidate();
+
 		
-		Object o=cal.ReadObiect("Employee.txt");
-		Employee m=(Employee)o;
 		JLabel username = new JLabel("歡迎登入:"+m.getName()+"   職位:"+m.getPosition());
 		username.setForeground(new Color(255, 255, 255));
 		username.setFont(new Font("新細明體", Font.BOLD, 18));
@@ -137,11 +290,8 @@ public class ManageSystem extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if(m.getPosition().equals("員工"))
 				{
-					
 					JOptionPane.showMessageDialog(contentPane, "權限不足,只有經理及總經理才可修改", "錯誤", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
+				}}});
 		btnNewButton.setBackground(new Color(255, 255, 255));
 		btnNewButton.setForeground(new Color(0, 0, 0));
 		btnNewButton.addActionListener(new ActionListener() {
@@ -243,7 +393,7 @@ public class ManageSystem extends JFrame {
 		btnNewButton_4.setBounds(60, 300, 138, 31);
 		panel.add(btnNewButton_4);
 		
-		JButton btnNewButton_5 = new JButton("重新登入");
+		JButton btnNewButton_5 = new JButton("切換使用者");
 		btnNewButton_5.setBackground(new Color(255, 255, 255));
 		btnNewButton_5.addMouseListener(new MouseAdapter() {
 			@Override
@@ -263,6 +413,23 @@ public class ManageSystem extends JFrame {
 		lblNewLabel_1.setBounds(0, 0, 1221, 550);
 		panel.add(lblNewLabel_1);
 
+	}
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
  		

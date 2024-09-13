@@ -221,4 +221,60 @@ public class PurchaseDaoImpl implements PurchaseDao{
 		
 	}
 
+	@Override
+	public List<Purchase> selectByKeyWord(String keyword) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select *from purchaseticket where concat(purchaseno,productname,name,purchaseAmount,sum,date) like ?";
+		List<Purchase> l=new ArrayList();
+		try {
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			ps.setString(1, keyword);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Purchase p=new Purchase();
+				p.setPurchaseno(rs.getString("purchaseno"));
+				p.setBarcode(rs.getString("productname"));
+				p.setEmployeeno(rs.getString("name"));
+				p.setPurchaseAmount(rs.getInt("purchaseAmount"));
+				p.setSum(rs.getInt("sum"));
+				p.setDate(rs.getString("date"));
+				l.add(p);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return l;
+	}
+
+	@Override
+	public List<Purchase> selectByKeyWord(String keyword, String date1, String date2) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select *from purchaseticket where concat(purchaseno,productname,name,purchaseAmount,sum,date) like ? and date between ? and ?";
+		List<Purchase> l=new ArrayList();
+		try {
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			ps.setString(1, keyword);
+			ps.setString(2, date1);
+			ps.setString(3, date2);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Purchase p=new Purchase();
+				p.setPurchaseno(rs.getString("purchaseno"));
+				p.setBarcode(rs.getString("productname"));
+				p.setEmployeeno(rs.getString("name"));
+				p.setPurchaseAmount(rs.getInt("purchaseAmount"));
+				p.setSum(rs.getInt("sum"));
+				p.setDate(rs.getString("date"));
+				l.add(p);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return l;
+	}
+
 }

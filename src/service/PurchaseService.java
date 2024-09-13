@@ -16,6 +16,10 @@ public interface PurchaseService {
 	
 	Purchase selectByPurchaseno(String purchaseno);
 	
+	List<Purchase> selectByKeyWord(String keyword);
+	
+	List<Purchase> selectByKeyWord(String keyword,String date1,String date2);
+	
 	//Purchase selectByid(Integer id);
 	
 	

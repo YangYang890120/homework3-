@@ -21,16 +21,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void addProduct(Product p) {
 		List<Product> l=pdi.selectByProductNo(p.getProductno());
-		Product[] pn=l.toArray(new Product[0]);
-		if(pn.length!=0)
-		{
-			JOptionPane.showMessageDialog(null, "產品編號已有人使用，請重新輸入");
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "成功新增商品");
-			pdi.add(p);
-		}
-		
+		pdi.add(p);
 	}
 
 	@Override

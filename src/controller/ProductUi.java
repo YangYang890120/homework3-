@@ -11,6 +11,7 @@ import javax.swing.table.TableModel;
 
 import model.Orders;
 import model.Product;
+import model.Purchase;
 import service.impl.ProductServiceImpl;
 import util.JTextFieldHintListener;
 
@@ -98,22 +99,22 @@ public class ProductUi extends JFrame {
 		
 		JLabel lblNewLabel_1_1 = new JLabel("商品名稱");
 		lblNewLabel_1_1.setFont(new Font("新細明體", Font.PLAIN, 16));
-		lblNewLabel_1_1.setBounds(20, 105, 64, 28);
+		lblNewLabel_1_1.setBounds(20, 160, 64, 28);
 		panel.add(lblNewLabel_1_1);
 		
 		Pname = new JTextField();
 		Pname.setColumns(10);
-		Pname.setBounds(109, 109, 96, 21);
+		Pname.setBounds(109, 164, 96, 21);
 		panel.add(Pname);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("商品條碼");
 		lblNewLabel_1_1_1.setFont(new Font("新細明體", Font.PLAIN, 16));
-		lblNewLabel_1_1_1.setBounds(20, 160, 64, 28);
+		lblNewLabel_1_1_1.setBounds(20, 105, 64, 28);
 		panel.add(lblNewLabel_1_1_1);
 		
 		barcode = new JTextField();
 		barcode.setColumns(10);
-		barcode.setBounds(109, 164, 96, 21);
+		barcode.setBounds(109, 109, 96, 21);
 		panel.add(barcode);
 		
 		JLabel label2 = new JLabel("商品價格");
@@ -211,15 +212,23 @@ public class ProductUi extends JFrame {
 		String Productname = Pname.getText();
 		Integer Price = Integer.parseInt(price.getText());
 		Integer Amount = Integer.parseInt(amount.getText());
+		boolean p=psi.findBarcode(Barcode);
 
-		if (Productno.isEmpty() ||Barcode.isEmpty() || Productname.isEmpty() || Price.equals(0) || Amount.equals(0)) {
+		if (Productno.isEmpty() ||Barcode.isEmpty() || Productname.isEmpty() || Price.equals(0) || Amount<0) {
 			JOptionPane.showMessageDialog(this, "資料不可空白，請填寫完整", "錯誤", JOptionPane.ERROR_MESSAGE);
 			return;
 		} else {
-			Product p1 = new Product(Productno,Barcode,Productname,Price,Amount);	
-			psi.addProduct(p1);	
-
-		}}
+			
+			if(p)
+			{
+				JOptionPane.showMessageDialog(this, "商品已存在,請確認條碼是否重複","錯誤", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+					Product p1 = new Product(Productno,Barcode,Productname,Price,Amount);	
+					psi.addProduct(p1);	
+					JOptionPane.showMessageDialog(null, "成功新增商品");
+		}}}
 	public void update(){
 		if(productno.getText()!="")
 		{
@@ -234,7 +243,7 @@ public class ProductUi extends JFrame {
 				JOptionPane.showMessageDialog(this, "資料不可空白，請填寫完整", "錯誤", JOptionPane.ERROR_MESSAGE);
 				return;
 			} else {
-				JOptionPane.showMessageDialog(null, "出貨資料修改成功");
+				JOptionPane.showMessageDialog(null, "存貨資料修改成功");
 				psi.update(Productno, Productname, Barcode, Price, Amount);
 				//clear();
 					

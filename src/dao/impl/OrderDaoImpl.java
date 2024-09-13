@@ -248,4 +248,59 @@ public class OrderDaoImpl implements OrderDao{
 		}
 		return l;
 	}
+
+	@Override
+	public List<Orders> selectByKeyWord(String keyword,String date1,String date2) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select * from ordersticket where concat(orderno,productname,name,membername,orderAmount,date) like ? and date between ? and ?";
+		List<Orders> l=new ArrayList();
+		try {
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			ps.setString(1, "%"+keyword+"%");
+			ps.setString(2, date1);
+			ps.setString(3, date2);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Orders o=new Orders();
+				o.setOrderno(rs.getString("orderno"));
+				o.setBarcode(rs.getString("productname"));
+				o.setEmployeeno(rs.getString("name"));
+				o.setMemberno(rs.getString("membername"));
+				o.setOrderamount(rs.getInt("orderAmount"));
+				o.setDate(rs.getString("date"));
+				l.add(o);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return l;
+	}
+
+	@Override
+	public List<Orders> selectByKeyWord(String keyword) {
+		Connection conn=DbConnection.getDb();
+		String SQL="select * from ordersticket where concat(orderno,productname,name,membername,orderAmount,date) like ?";
+		List<Orders> l=new ArrayList();
+		try {
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			ps.setString(1, "%"+keyword+"%");
+
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				Orders o=new Orders();
+				o.setOrderno(rs.getString("orderno"));
+				o.setBarcode(rs.getString("productname"));
+				o.setEmployeeno(rs.getString("name"));
+				o.setMemberno(rs.getString("membername"));
+				o.setOrderamount(rs.getInt("orderAmount"));
+				o.setDate(rs.getString("date"));
+				l.add(o);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return l;
+	}
 }

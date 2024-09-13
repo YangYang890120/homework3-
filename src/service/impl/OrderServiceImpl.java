@@ -2,6 +2,7 @@ package service.impl;
 
 import java.util.List;
 
+
 import dao.impl.OrderDaoImpl;
 import model.Orders;
 import service.OrderService;
@@ -15,8 +16,8 @@ public class OrderServiceImpl implements OrderService{
 	OrderDaoImpl odi=new OrderDaoImpl();
 	@Override
 	public void addOrder(Orders o) {
-		odi.addOrder(o);
-		
+	
+			odi.addOrder(o);	
 	}
 
 	@Override
@@ -36,6 +37,7 @@ public class OrderServiceImpl implements OrderService{
 	public void update(String orderno,String barcode, String employeeno, String memberno, Integer orderamount, String date) {
 		Orders o=selectByOrderno(orderno);
 		
+		o.getOrderamount();
 		o.setBarcode(barcode);
 		o.setEmployeeno(employeeno);
 		o.setMemberno(memberno);
@@ -68,6 +70,18 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public List<Orders> selectFromView() {
 		List<Orders> l=odi.selectFromView();
+		return l;
+	}
+
+	@Override
+	public List<Orders> selectByKeyWord(String keyword) {
+		List<Orders> l=odi.selectByKeyWord(keyword);
+		return l;
+	}
+
+	@Override
+	public List<Orders> selectByKeyWord(String keyword, String date1, String date2) {
+	 	List<Orders> l=odi.selectByKeyWord(keyword, date1, date2);
 		return l;
 	}
 
